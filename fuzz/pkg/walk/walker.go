@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Illyrix/tidb-go-fuzz/src/pkg/types"
+	"github.com/Illyrix/tidb-go-fuzz/dep/types"
 )
 
 type Visitor struct {
