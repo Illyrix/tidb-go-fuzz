@@ -1,4 +1,4 @@
-package walk
+package builder
 
 import (
 	"go/ast"
@@ -10,14 +10,28 @@ import (
 )
 
 type Visitor struct {
-	blockIds []types.BlockIdType // current block id stack
-	blocks   []*types.Block      // all blocks in this file (unordered)
+	// blockIds []types.BlockIdType // current block id stack
+	// blocks   []*types.Block      // all blocks in this file (unordered)
+
+	// the outer block is 0x0000
+	parentBlockId types.BlockIdType
 
 	fset *token.FileSet
 }
 
 func init() {
 	rand.Seed(time.Now().Unix())
+}
+
+// for recursive visit
+func (v *Visitor) Clone() *Visitor {
+	if v == nil {
+		return nil
+	}
+	return &Visitor{
+		parentBlockId: v.parentBlockId,
+		fset:          v.fset,
+	}
 }
 
 func (v *Visitor) Visit(n ast.Node) ast.Visitor {
@@ -52,7 +66,6 @@ func (v *Visitor) Visit(n ast.Node) ast.Visitor {
 		}
 		// see https://github.com/dvyukov/go-fuzz/blob/ea4a322d67f6e874238a8a7ab28e95a6d6675190/go-fuzz-build/cover.go#L80
 		// for why go-fuzz needs replacement
-		// may use `case interface{}:` is also effective?
 	case *ast.TypeSwitchStmt:
 		// Don't annotate an empty switch - creates a syntax error.
 		if t.Body == nil || len(t.Body.List) == 0 {
@@ -103,18 +116,22 @@ func (v *Visitor) Visit(n ast.Node) ast.Visitor {
 			case *ast.CaseClause: // switch
 				for _, n := range t.List {
 					clause := n.(*ast.CaseClause)
-					clause.Body = v.addCounters(clause.Pos(), clause.End(), clause.Body, false)
+					_, clause.Body = v.addCounters(clause.Pos(), clause.End(), clause.Body, false)
 				}
 				return v
 			case *ast.CommClause: // select
 				for _, n := range t.List {
 					clause := n.(*ast.CommClause)
-					clause.Body = v.addCounters(clause.Pos(), clause.End(), clause.Body, false)
+					_, clause.Body = v.addCounters(clause.Pos(), clause.End(), clause.Body, false)
 				}
 				return v
 			}
 		}
-		t.List = v.addCounters(t.Lbrace, t.Rbrace+1, t.List, true) // +1 to step past closing brace.
+		var blockId types.BlockIdType
+		blockId, t.List = v.addCounters(t.Lbrace, t.Rbrace+1, t.List, true) // +1 to step past closing brace.
+		cloned := v.Clone()
+		cloned.parentBlockId = blockId
+		return cloned
 	case *ast.BinaryExpr:
 		if t.Op == token.LAND || t.Op == token.LOR {
 			// x || y ==> x || (func() bool {return y})()
@@ -130,17 +147,19 @@ func (v *Visitor) Visit(n ast.Node) ast.Visitor {
 	return v
 }
 
-func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendToClosingBrace bool) []ast.Stmt {
+func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendToClosingBrace bool) (types.BlockIdType, []ast.Stmt) {
 	// divide this block into several blocks by control flow statements. e.g.
 	// { ... if 1>0 { ... } ... }
 	// ==>
 	// { ... BLOCK1 } if 1>0 { ... BLOCK2 } { ... BLOCK3 }
 
 	if len(stmts) == 0 {
-		return []ast.Stmt{v.newCounter(pos, blockEnd)}
+		bId := genBlockId()
+		return bId, []ast.Stmt{v.newCounter(pos, blockEnd, v.parentBlockId, bId)}
 	}
 
 	list := make([]ast.Stmt, 0)
+	lastBId := v.parentBlockId
 	for {
 		// find the first control flow statement, and it will be
 		// the last stmt of current block
@@ -158,7 +177,9 @@ func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendT
 			end = blockEnd
 		}
 		if pos != end { // Can have no source to cover if e.g. blocks abut.
-			list = append(list, v.newCounter(pos, end))
+			bId := genBlockId()
+			list = append(list, v.newCounter(pos, end, lastBId, bId))
+			lastBId = bId
 		}
 		list = append(list, list[0:last]...)
 		list = list[last:]
@@ -168,7 +189,7 @@ func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendT
 		pos = list[0].Pos()
 	}
 
-	return list
+	return lastBId, list
 }
 
 // Warn: its implementation relates to defination of BlockIdType
@@ -176,8 +197,9 @@ func genBlockId() types.BlockIdType {
 	return types.BlockIdType(rand.Uint32() >> 16)
 }
 
-func (v *Visitor) newCounter(pos, end token.Pos) ast.Stmt {
-	return nil
+func (v *Visitor) newCounter(pos, end token.Pos, src, dst types.BlockIdType) ast.Stmt {
+	// do not log where this block attaches
+	return makeCountNode(src, dst)
 }
 
 func (v *Visitor) statementBoundary(s ast.Stmt) token.Pos {
@@ -261,6 +283,7 @@ func (f *funcLitFinder) found() bool {
 	return token.Pos(*f) != token.NoPos
 }
 
+// find closure function
 func hasFuncLiteral(n ast.Node) (bool, token.Pos) {
 	if n == nil {
 		return false, 0

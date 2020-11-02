@@ -53,3 +53,7 @@ func (tb *TraceBits) AddCount(src, dst BlockIdType) {
 		(*tb)[key]++
 	}
 }
+
+func (tb *TraceBits) Clean() {
+	tb = new(TraceBits, TraceBitsSize)
+}

@@ -1,0 +1,3 @@
+github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201101090347-c89734463008 h1:Q6FvM8o7c3HP5kG7CD/cYCeXW5LvvTTqp+keq+x2I6s=
+github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201101090347-c89734463008/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
+github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201101090347-c89734463008 h1:UZsF3ZzYo+HpfV6rU3Bsja6vYFfnw8WzRdrhPL3jgFo=
