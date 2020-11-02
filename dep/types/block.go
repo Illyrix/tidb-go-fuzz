@@ -1,5 +1,6 @@
 package types
 
+/*
 type CharPosition struct {
 	Line   uint32
 	Column uint32
@@ -23,3 +24,4 @@ type Block struct {
 	End   CharPosition
 	Type  BlockType
 }
+*/
