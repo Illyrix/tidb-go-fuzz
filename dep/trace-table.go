@@ -31,7 +31,7 @@ func GetTraceTable() *types.TraceBits {
 }
 
 // start listening in init()
-func init() {
+func Listen() {
 	handler := func(c *net.UnixConn) {
 		data := make([]byte, 255)
 		_, err := c.Read(data) // todo: support distinguish SQL trace log
