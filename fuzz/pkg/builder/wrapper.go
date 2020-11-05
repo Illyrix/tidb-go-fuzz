@@ -46,15 +46,12 @@ func makeCountNode(src, dst types.BlockIdType) ast.Stmt {
 	}
 }
 
-// inject `import ".../tidb-go-fuzz/dep" as ...` into where Counter appears
-func addImportDecl() {}
-
 // `go add .../tidb-go-fuzz/dep`
-func installDep() {
+func InstallDep() {
 
 }
 
 // inject calling `tidb_go_fuzz.Listen()` on startup
-func startListen() {
+func StartListen() {
 
 }

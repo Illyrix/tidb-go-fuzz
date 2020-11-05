@@ -1,11 +1,21 @@
 package main
 
 import (
+	"bytes"
 	"flag"
+	"fmt"
+	"go/ast"
+	"go/parser"
+	"go/printer"
+	"go/token"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/Illyrix/tidb-go-fuzz/fuzz/pkg"
+	"github.com/Illyrix/tidb-go-fuzz/fuzz/pkg/builder"
 	"github.com/Illyrix/tidb-go-fuzz/fuzz/pkg/types"
 )
 
@@ -39,4 +49,64 @@ func main() {
 	ignoreFiles[filepath.Join(*flagTargetDir, ".git")] = void
 	ignoreFiles[filepath.Join(*flagTargetDir, ".vscode")] = void
 
+	// copy tidb source code to target dir
+	pkg.Copy(*flagSrcDir, *flagTargetDir)
+
+	// walk on every file
+	err = filepath.Walk(*flagTargetDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if _, ok := ignoreFiles[path]; ok {
+			return filepath.SkipDir
+		}
+
+		if !info.IsDir() &&
+			strings.HasSuffix(info.Name(), ".go") &&
+			!strings.HasSuffix(info.Name(), "_test.go") {
+			src, err := ioutil.ReadFile(path)
+			if err != nil {
+				panic(path + " read error\n")
+			}
+			modifiedFile := addCounter(src)
+			err = ioutil.WriteFile(path, modifiedFile, os.ModePerm)
+			if err != nil {
+				panic(fmt.Sprintf("%s write error %v\n", path, err))
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		panic("walk files for adding counters failed")
+	}
+
+	//
+}
+
+func addCounter(src []byte) []byte {
+	fset, astFile := parse(src)
+
+	visitor := builder.NewVisitorPtr(fset)
+	ast.Walk(visitor, astFile)
+
+	visitor.AddImportDecl(astFile)
+
+	out := new(bytes.Buffer)
+	cfg := printer.Config{
+		Mode:     printer.SourcePos,
+		Tabwidth: 8,
+		Indent:   0,
+	}
+	cfg.Fprint(out, fset, astFile)
+	return out.Bytes()
+}
+
+func parse(content []byte) (*token.FileSet, *ast.File) {
+	fset := token.NewFileSet()
+	aFile, err := parser.ParseFile(fset, "", content, parser.ParseComments)
+	if err != nil {
+		panic(err)
+	}
+
+	return fset, aFile
 }

@@ -16,7 +16,7 @@ type Visitor struct {
 	// the outer block is 0x0000
 	parentBlockId types.BlockIdType
 
-	fset *token.FileSet
+	FSet *token.FileSet
 }
 
 func init() {
@@ -30,7 +30,14 @@ func (v *Visitor) Clone() *Visitor {
 	}
 	return &Visitor{
 		parentBlockId: v.parentBlockId,
-		fset:          v.fset,
+		FSet:          v.FSet,
+	}
+}
+
+func NewVisitorPtr(fset *token.FileSet) *Visitor {
+	return &Visitor{
+		FSet:          fset,
+		parentBlockId: 0,
 	}
 }
 
@@ -327,4 +334,9 @@ func (v *Visitor) endsBasicSourceBlock(s ast.Stmt) bool {
 	}
 	found, _ := hasFuncLiteral(s)
 	return found
+}
+
+// inject `import ".../tidb-go-fuzz/dep" as ...` into where Counter appears
+func (v *Visitor) AddImportDecl(aFile *ast.File) {
+
 }

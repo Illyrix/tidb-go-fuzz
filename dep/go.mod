@@ -1,3 +1,3 @@
-module github.com/Illyrix/tidb-go-fuzz/dep
+module dep
 
 go 1.13
