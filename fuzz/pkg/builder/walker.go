@@ -338,5 +338,36 @@ func (v *Visitor) endsBasicSourceBlock(s ast.Stmt) bool {
 
 // inject `import ".../tidb-go-fuzz/dep" as ...` into where Counter appears
 func (v *Visitor) AddImportDecl(aFile *ast.File) {
+	hasImports := false
+	for _, decl := range aFile.Decls {
+		if gDecl, ok := decl.(*ast.GenDecl); ok {
+			if gDecl.Tok == token.IMPORT {
+				hasImports = true
+				gDecl.Specs = append(gDecl.Specs, &ast.ImportSpec{
+					Path: &ast.BasicLit{Kind: token.STRING,
+						Value: FUZZ_DEP_IMPORT_NAME},
+					Name: &ast.Ident{
+						Name: FUZZ_DEP_IMPORT_AS,
+					},
+				})
+				break
+			}
+		}
+	}
 
+	if !hasImports {
+		newDecl := make([]ast.Decl, 0)
+		newDecl = append(newDecl, &ast.GenDecl{
+			Tok: token.IMPORT,
+			Specs: []ast.Spec{&ast.ImportSpec{
+				Path: &ast.BasicLit{Kind: token.STRING,
+					Value: FUZZ_DEP_IMPORT_NAME},
+				Name: &ast.Ident{
+					Name: FUZZ_DEP_IMPORT_AS,
+				},
+			}},
+		})
+		newDecl = append(newDecl, aFile.Decls...)
+		aFile.Decls = newDecl
+	}
 }

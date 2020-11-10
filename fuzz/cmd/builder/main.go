@@ -80,7 +80,14 @@ func main() {
 		panic("walk files for adding counters failed")
 	}
 
-	//
+	// add listen in tidb-server/main.go
+	builder.AddListenStart(*flagTargetDir)
+
+	// install dependency
+	fmt.Println("Installing dependency")
+	builder.InstallDep(*flagTargetDir)
+
+	fmt.Println("Compiling tidb")
 }
 
 func addCounter(src []byte) []byte {
