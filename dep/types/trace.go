@@ -27,13 +27,13 @@ func (tb *TraceBits) GetCount(src, dst BlockIdType) (uint8, error) {
 	return tb.bits[src^dst], nil
 }
 
-func (tb *TraceBits) GetBits() [TraceBitsSize]byte {
+func (tb *TraceBits) GetBits() []byte {
 	if tb == nil {
-		return 0, errors.New("TraceBits has not been initialized")
+		return nil
 	}
 	tb.mu.RLock()
 	defer tb.mu.RUnlock()
-	return tb.bits
+	return tb.bits[:]
 }
 
 // see: http://rk700.github.io/2017/12/28/afl-internals/#%E5%88%86%E6%94%AF%E4%BF%A1%E6%81%AF%E7%9A%84%E5%88%86%E6%9E%90

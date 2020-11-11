@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"go/ast"
 	"go/parser"
+	"go/printer"
 	"go/token"
 	"io/ioutil"
+	"log"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
@@ -113,5 +116,19 @@ func AddListenStart(root string) {
 		}
 
 		funcDecl.Body.List = append([]ast.Stmt{callListen}, funcDecl.Body.List...)
+	}
+
+	out := new(bytes.Buffer)
+	cfg := printer.Config{
+		Mode:     printer.SourcePos,
+		Tabwidth: 8,
+		Indent:   0,
+	}
+	cfg.Fprint(out, fset, aFile)
+
+	// write back to file
+	err = ioutil.WriteFile(main, out.Bytes(), os.ModePerm)
+	if err != nil {
+		log.Fatalf("%s write error %v\n", main, err)
 	}
 }
