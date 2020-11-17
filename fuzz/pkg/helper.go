@@ -20,7 +20,7 @@ func Copy(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	return copy0(src, dest, info)
+	return copy0(src, dst, info)
 }
 
 // copy dispatches copy-funcs according to the mode.
@@ -76,7 +76,7 @@ func dcopy(srcdir, destdir string, info os.FileInfo) error {
 	originalMode := info.Mode()
 
 	// Make dest dir with 0755 so that everything writable.
-	if err := os.MkdirAll(destdir, tmpPermissionForDirectory); err != nil {
+	if err := os.MkdirAll(destdir, os.FileMode(0755)); err != nil {
 		return err
 	}
 	// Recover dir mode with original one.
