@@ -88,6 +88,9 @@ func main() {
 	builder.InstallDep(*flagTargetDir)
 
 	fmt.Println("Compiling tidb")
+	builder.CompileTidb(*flagTargetDir)
+
+	fmt.Printf("Done! Run `%s` to start tidb server", "")
 }
 
 func addCounter(src []byte) []byte {

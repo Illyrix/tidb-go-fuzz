@@ -72,10 +72,12 @@ func CompileTidb(root string) {
 	shellCmd := exec.Command("make", "server")
 	shellCmd.Dir = root
 	buf := &bytes.Buffer{}
+	errBuf := &bytes.Buffer{}
 	shellCmd.Stdout = buf
+	shellCmd.Stderr = errBuf
 	err := shellCmd.Run()
-	if err != nil {
-		panic(fmt.Sprintf("compile error %v\n%s\n", err, buf.String()))
+	if err != nil && fmt.Sprintf("%v", err) != "exit status 2" {
+		panic(fmt.Sprintf("compile error %v\n%s\n%s", err, buf.String(), errBuf.String()))
 	}
 }
 
