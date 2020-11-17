@@ -42,6 +42,7 @@ func NewVisitorPtr(fset *token.FileSet) *Visitor {
 }
 
 func (v *Visitor) Visit(n ast.Node) ast.Visitor {
+	// fmt.Printf("%T\n", n)
 	switch t := n.(type) {
 	case *ast.GenDecl:
 		if t.Tok != token.VAR {
@@ -172,9 +173,9 @@ func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendT
 		// the last stmt of current block
 		last := 0
 		end := blockEnd
-		for last = 0; last < len(list); last++ {
-			end = v.statementBoundary(list[last])
-			if v.endsBasicSourceBlock(list[last]) {
+		for last = 0; last < len(stmts); last++ {
+			end = v.statementBoundary(stmts[last])
+			if v.endsBasicSourceBlock(stmts[last]) {
 				extendToClosingBrace = false // Block is broken up now.
 				last++
 				break
@@ -188,12 +189,12 @@ func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendT
 			list = append(list, v.newCounter(pos, end, lastBId, bId))
 			lastBId = bId
 		}
-		list = append(list, list[0:last]...)
-		list = list[last:]
-		if len(list) == 0 {
+		list = append(list, stmts[0:last]...)
+		stmts = stmts[last:]
+		if len(stmts) == 0 {
 			break
 		}
-		pos = list[0].Pos()
+		pos = stmts[0].Pos()
 	}
 
 	return lastBId, list
@@ -345,7 +346,7 @@ func (v *Visitor) AddImportDecl(aFile *ast.File) {
 				hasImports = true
 				gDecl.Specs = append(gDecl.Specs, &ast.ImportSpec{
 					Path: &ast.BasicLit{Kind: token.STRING,
-						Value: FUZZ_DEP_IMPORT_NAME},
+						Value: "\"" + FUZZ_DEP_IMPORT_NAME + "\""},
 					Name: &ast.Ident{
 						Name: FUZZ_DEP_IMPORT_AS,
 					},
@@ -361,7 +362,7 @@ func (v *Visitor) AddImportDecl(aFile *ast.File) {
 			Tok: token.IMPORT,
 			Specs: []ast.Spec{&ast.ImportSpec{
 				Path: &ast.BasicLit{Kind: token.STRING,
-					Value: FUZZ_DEP_IMPORT_NAME},
+					Value: "\"" + FUZZ_DEP_IMPORT_NAME + "\""},
 				Name: &ast.Ident{
 					Name: FUZZ_DEP_IMPORT_AS,
 				},
