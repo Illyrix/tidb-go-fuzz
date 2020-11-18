@@ -98,8 +98,9 @@ func addCounter(src []byte) []byte {
 
 	visitor := builder.NewVisitorPtr(fset)
 	ast.Walk(visitor, astFile)
-
-	visitor.AddImportDecl(astFile)
+	if visitor.Changed {
+		visitor.AddImportDecl(astFile)
+	}
 
 	out := new(bytes.Buffer)
 	cfg := printer.Config{

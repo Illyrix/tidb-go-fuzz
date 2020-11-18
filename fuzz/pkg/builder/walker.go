@@ -16,7 +16,8 @@ type Visitor struct {
 	// the outer block is 0x0000
 	parentBlockId types.BlockIdType
 
-	FSet *token.FileSet
+	FSet    *token.FileSet
+	Changed bool
 }
 
 func init() {
@@ -31,12 +32,14 @@ func (v *Visitor) Clone() *Visitor {
 	return &Visitor{
 		parentBlockId: v.parentBlockId,
 		FSet:          v.FSet,
+		Changed:       v.Changed,
 	}
 }
 
 func NewVisitorPtr(fset *token.FileSet) *Visitor {
 	return &Visitor{
 		FSet:          fset,
+		Changed:       false,
 		parentBlockId: 0,
 	}
 }
@@ -160,6 +163,8 @@ func (v *Visitor) addCounters(pos, blockEnd token.Pos, stmts []ast.Stmt, extendT
 	// { ... if 1>0 { ... } ... }
 	// ==>
 	// { ... BLOCK1 } if 1>0 { ... BLOCK2 } { ... BLOCK3 }
+
+	v.Changed = true
 
 	if len(stmts) == 0 {
 		bId := genBlockId()
