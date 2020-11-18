@@ -1,6 +1,7 @@
 package dep
 
 import (
+	"fmt"
 	"net"
 	"sync"
 
@@ -12,7 +13,7 @@ var (
 	mu         sync.Mutex // this lock is just for singleton
 )
 
-const ListenAddress = "/var/run/tidb-go-fuzz.sock"
+const ListenAddress = "127.0.0.1:16801"
 
 // singleton
 // todo: a map of TraceBits instead of only one
@@ -32,7 +33,7 @@ func GetTraceTable() *types.TraceBits {
 
 // start listening in init()
 func Listen() {
-	handler := func(c *net.UnixConn) {
+	handler := func(c *net.TCPConn) {
 		data := make([]byte, 255)
 		_, err := c.Read(data) // todo: support distinguish SQL trace log
 		if err != nil {
@@ -50,9 +51,9 @@ func Listen() {
 	}
 
 	go func() {
-		socket, err := net.Listen("unix", ListenAddress)
+		socket, err := net.Listen("tcp", ListenAddress)
 		if err != nil {
-			panic("start linstening failed")
+			panic(fmt.Sprintf("start linstening failed: %v", err))
 		}
 		defer socket.Close()
 		for {
@@ -63,7 +64,7 @@ func Listen() {
 
 			// Note: it can be common function call
 			// because only one connection at one time
-			go handler(conn.(*net.UnixConn))
+			go handler(conn.(*net.TCPConn))
 		}
 	}()
 }

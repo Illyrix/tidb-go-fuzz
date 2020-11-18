@@ -6,12 +6,16 @@ github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117064616-9ae239322e6a h1:3/PpDF
 github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117064616-9ae239322e6a/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
 github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117072403-7e724ec560b6 h1:PBM7YGp652p3A9V7v+y12tbVATed7XQb0E/r+mCr5eM=
 github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117072403-7e724ec560b6/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
+github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117081821-8aa9f9aaf451 h1:qApKiyOvmfAkqat8ZN4lxB+AiS8tyb3AJXDt6BmaSiI=
+github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117081821-8aa9f9aaf451/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201110173639-2ab83e4475ea h1:PtD3cQUJSfS3hsh1AIGbIXk3PeJ3cSv7Cr5P01ng4yQ=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201110173639-2ab83e4475ea/go.mod h1:JgOnRUmGpcdB0KhPoUgJDa4/Pbdf/w0axG2iOoNPpEs=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117064616-9ae239322e6a h1:UAuYKb3q23DKDretUrGENEEJc4DC8xvBGZnvIFvo+kM=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117064616-9ae239322e6a/go.mod h1:BZo7PyyBP9wN/LIwYMdVpZKFXcq0hTc3F8+rZmXoB48=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117072403-7e724ec560b6 h1:7IpCMwG6c8eU8M2V9In3QGB9hDqyuVUHdft7CIIC0kE=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117072403-7e724ec560b6/go.mod h1:bmrmIbKIOFJxs2bQprz5o59BbxPx/ybkFcRE7G9krfQ=
+github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117081821-8aa9f9aaf451 h1:Af/xU5Et2rSwHohC6kmgEStnR6Lz1I6zdqwgF7EPd+g=
+github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117081821-8aa9f9aaf451/go.mod h1:bmrmIbKIOFJxs2bQprz5o59BbxPx/ybkFcRE7G9krfQ=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
