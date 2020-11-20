@@ -76,7 +76,7 @@ func CompileTidb(root string) {
 	shellCmd.Stdout = buf
 	shellCmd.Stderr = errBuf
 	err := shellCmd.Run()
-	if err != nil && fmt.Sprintf("%v", err) != "exit status 2" {
+	if err != nil {
 		panic(fmt.Sprintf("compile error %v\n%s\n%s", err, buf.String(), errBuf.String()))
 	}
 }

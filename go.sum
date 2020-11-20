@@ -10,6 +10,8 @@ github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117081821-8aa9f9aaf451 h1:qApKiy
 github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201117081821-8aa9f9aaf451/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
 github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201118183325-aa3f46ee5bea h1:1n6ix7+ueIOpGRTVqr3FGHhvwQkgIeXr8pZ7R25hpmA=
 github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201118183325-aa3f46ee5bea/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
+github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201118185153-fc43ad7494bd h1:eYnoRb6nFLPE8gpyxspm8+gKZD6QpWEJOaNg/gBGIpY=
+github.com/Illyrix/tidb-go-fuzz/dep v0.0.0-20201118185153-fc43ad7494bd/go.mod h1:BRuIzoAvQTQPWdit3kb/cmFjPVIPXX+72sFdZw6itxg=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201110173639-2ab83e4475ea h1:PtD3cQUJSfS3hsh1AIGbIXk3PeJ3cSv7Cr5P01ng4yQ=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201110173639-2ab83e4475ea/go.mod h1:JgOnRUmGpcdB0KhPoUgJDa4/Pbdf/w0axG2iOoNPpEs=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117064616-9ae239322e6a h1:UAuYKb3q23DKDretUrGENEEJc4DC8xvBGZnvIFvo+kM=
@@ -18,6 +20,8 @@ github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117072403-7e724ec560b6 h1:7IpCM
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117072403-7e724ec560b6/go.mod h1:bmrmIbKIOFJxs2bQprz5o59BbxPx/ybkFcRE7G9krfQ=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117081821-8aa9f9aaf451 h1:Af/xU5Et2rSwHohC6kmgEStnR6Lz1I6zdqwgF7EPd+g=
 github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201117081821-8aa9f9aaf451/go.mod h1:bmrmIbKIOFJxs2bQprz5o59BbxPx/ybkFcRE7G9krfQ=
+github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201118185153-fc43ad7494bd h1:/XZWiMcusC+YB1m1EHo6j2EPs1sjvbR7Byj9UwpLFgs=
+github.com/Illyrix/tidb-go-fuzz/fuzz v0.0.0-20201118185153-fc43ad7494bd/go.mod h1:lFs9XvmCSAAXaYyhk8pr8SZV3PRL9ebrnTWH9xxiWcs=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
